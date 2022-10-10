@@ -8,7 +8,7 @@ import (
 
 type SayRequest struct {
 	Text     string          `json:"text"`
-	FileName string          `json:"file_name"`
+	FileName string          `json:"file_name,omitempty"`
 	Narrator Narrator        `json:"narrator,omitempty"`
 	Speed    int             `json:"speed,omitempty"`
 	Pitch    int             `json:"pitch,omitempty"`
