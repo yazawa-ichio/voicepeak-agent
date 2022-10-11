@@ -2,17 +2,15 @@ package voicepeakagent
 
 import (
 	"fmt"
-	"path/filepath"
 	"strings"
 )
 
 type SayRequest struct {
-	Text     string          `json:"text"`
-	FileName string          `json:"file_name,omitempty"`
-	Narrator Narrator        `json:"narrator,omitempty"`
-	Speed    int             `json:"speed,omitempty"`
-	Pitch    int             `json:"pitch,omitempty"`
-	Emotions []*EmotionValue `json:"emotions,omitempty"`
+	Text     string         `json:"text"`
+	Narrator Narrator       `json:"narrator,omitempty"`
+	Speed    int            `json:"speed,omitempty"`
+	Pitch    int            `json:"pitch,omitempty"`
+	Emotions []EmotionValue `json:"emotions,omitempty"`
 }
 
 type EmotionValue struct {
@@ -20,26 +18,25 @@ type EmotionValue struct {
 	Rate    int     `json:"rate"`
 }
 
-func NewSayRequest(text, fileName string) *SayRequest {
+func NewSayRequest(text string) *SayRequest {
 	return &SayRequest{
-		Text:     text,
-		FileName: fileName,
+		Text: text,
 	}
 }
 
 func (s *SayRequest) SetEmotion(emotion Emotion, rate int) {
-	s.Emotions = append(s.Emotions, &EmotionValue{
+	s.Emotions = append(s.Emotions, EmotionValue{
 		Emotion: emotion,
 		Rate:    rate,
 	})
 }
 
-func (sr *SayRequest) GetArgs(outDir string) ([]string, error) {
+func (sr *SayRequest) GetArgs(outPath string) ([]string, error) {
 	var args []string
 	args = append(args, "-s")
 	args = append(args, sr.Text)
 	args = append(args, "-o")
-	args = append(args, filepath.Join(outDir, sr.FileName))
+	args = append(args, outPath)
 	if len(sr.Narrator) > 0 {
 		args = append(args, "-n")
 		args = append(args, sr.Narrator.String())
